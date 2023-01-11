@@ -80,7 +80,7 @@ task:
 
        - make test-api-stubs-docs || echo no problem
 
-       - mka evolution -j10
+       - mka evolution
 
 
 Upload_script:
