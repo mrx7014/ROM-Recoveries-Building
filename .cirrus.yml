@@ -36,9 +36,9 @@ task:
 
        - sudo ln -sf /usr/bin/python2 /usr/bin/python
 
-       - git config --global user.name "Sushrut1101"
+       - git config --global user.name "OmarAlCoptan"
 
-       - git config --global user.email "guptasushrut@gmail.com"
+       - git config --global user.email "omarcoptan9@gmail.com"
 
        - git clone https://github.com/akhilnarang/scripts.git ~/scripts
 
@@ -48,21 +48,39 @@ task:
 
        - cd 
        
-       - mkdir evo
+       - mkdir -p /tmp/rom
 
-       - cd evo
+       - cd /tmp/rom
 
-       - repo init -u https://github.com/Evolution-X/manifest -b tiramisu
+       - repo init -q --no-repo-verify --depth=1 -u https://github.com/Evolution-X/manifest -b tiramisu -g default,-device,-mips,-darwin,-notdefault
 
-       - git clone https://github.com/OmarAlCoptan/local_manifest.git -b gtaxllte .repo/local_manifests
+       - git clone https://github.com/OmarAlCoptan/local_manifest.git --depth 1 -b gtaxllte .repo/local_manifests
 
-       - repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+       - repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j 30 || repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j 8
 
        - . build/envsetup.sh
-
+  
        - lunch evolution_gtaxllte-userdebug
 
-       - mka evolution
+       - export CCACHE_DIR=/tmp/ccache
+
+       - export CCACHE_EXEC=$(which ccache)
+
+       - export USE_CCACHE=1
+
+       - ccache -M 20G # It took only 6.4GB for mido
+    
+       - ccache -o compression=true # Will save times and data to download and upload ccache, also negligible performance issue
+
+       - ccache -z # Clear old stats, so monitor script will provide real ccache statistics
+
+       - make api-stubs-docs || echo no problem
+
+       - make system-api-stubs-docs || echo no problem
+
+       - make test-api-stubs-docs || echo no problem
+
+       - mka evolution -j10
 
 
 Upload_script:
