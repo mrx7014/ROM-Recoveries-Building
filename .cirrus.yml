@@ -16,23 +16,17 @@ task:
 
        - export DEBIAN_FRONTEND=noninteractive
 
-       - apt update
-
-       - apt install sudo
-
-       - df -h
-
-       - DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
+       - pacman -S sudo
 
        - ln -sf /usr/share/zoneinfo/Asia/Kolkata /etc/localtime
 
-       - apt-get install -y tzdata
+       - pacman -S tzdata
 
        - dpkg-reconfigure --frontend noninteractive tzdata
 
-       - sudo apt update -y && sudo apt install git aria2 curl wget rsync zip unzip lzma cpio ccache neofetch -y
+       - sudo pacman -S git aria2 curl wget rsync zip unzip lzma cpio ccache neofetch -y
 
-       - sudo apt install python2 -y
+       - sudo pacman -s python2 -y
 
        - sudo ln -sf /usr/bin/python2 /usr/bin/python
 
@@ -54,13 +48,13 @@ task:
 
        - repo init -q --no-repo-verify --depth=1 -u https://github.com/Evolution-X/manifest -b tiramisu -g default,-device,-mips,-darwin,-notdefault
 
-       - git clone https://github.com/OmarAlCoptan/local_manifest.git --depth 1 -b gtaxllte .repo/local_manifests
+       - git clone https://github.com/OmarAlCoptan/local_manifest.git --depth 1 -b evo .repo/local_manifests
 
        - repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j 30 || repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j 8
 
        - . build/envsetup.sh
   
-       - lunch evolution_gtaxllte-userdebug
+       - lunch evolution_lavender-userdebug
 
        - export CCACHE_DIR=/tmp/ccache
 
