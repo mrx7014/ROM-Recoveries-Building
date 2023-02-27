@@ -10,5 +10,5 @@ A Free CI to Build Custom ROMS
 
 ## Contact US 
 
-- Telegram: https://t.me/mrx7014
+- Linktree: https://linktr.ee/mrx7014
  
