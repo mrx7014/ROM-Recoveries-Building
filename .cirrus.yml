@@ -6,33 +6,41 @@ task:
 
   container:
 
-      image: docker
+      image: ubuntu:20.04
 
       cpu: 8
 
       memory: 32G
-      
+
+  
+
   Build-Env-Setup_script:
 
        - export DEBIAN_FRONTEND=noninteractive
 
-       - pacman -S sudo
+       - apt update
+
+       - apt install sudo
+
+       - df -h
+
+       - DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
 
        - ln -sf /usr/share/zoneinfo/Asia/Kolkata /etc/localtime
 
-       - pacman -S tzdata
+       - apt-get install -y tzdata
 
        - dpkg-reconfigure --frontend noninteractive tzdata
 
-       - sudo pacman -S git aria2 curl wget rsync zip unzip lzma cpio ccache neofetch -y
+       - sudo apt update -y && sudo apt install git aria2 curl wget rsync zip unzip lzma cpio ccache neofetch -y
 
-       - sudo pacman -s python2 -y
+       - sudo apt install python2 -y
 
        - sudo ln -sf /usr/bin/python2 /usr/bin/python
 
-       - git config --global user.name "OmarAlCoptan"
+       - git config --global user.name "Sushrut1101"
 
-       - git config --global user.email "omarcoptan9@gmail.com"
+       - git config --global user.email "guptasushrut@gmail.com"
 
        - git clone https://github.com/akhilnarang/scripts.git ~/scripts
 
@@ -42,42 +50,21 @@ task:
 
        - cd 
        
-       - mkdir -p /tmp/rom
+       - mkdir lineage19
 
-       - cd /tmp/rom
+       - cd lineage19
 
-       - repo init -q --no-repo-verify --depth=1 -u https://github.com/Evolution-X/manifest -b tiramisu -g default,-device,-mips,-darwin,-notdefault
+       - repo init -u https://github.com/LineageOS/android.git -b lineage-19.1
 
-       - git clone https://github.com/OmarAlCoptan/local_manifest.git --depth 1 -b evo .repo/local_manifests
+       - git clone https://github.com/TALUAtGitHub/gtaxl-manifests.git -b lineage-19.1 .repo/local_manifests
 
-       - repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j 30 || repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j 8
+       - repo sync --force-sync --no-tags --no-clone-bundle -c
 
        - . build/envsetup.sh
-  
-       - lunch evolution_lavender-userdebug
 
-       - export CCACHE_DIR=/tmp/ccache
+       - lunch lineage_gtaxllte-userdebug
 
-       - export CCACHE_EXEC=$(which ccache)
-
-       - export USE_CCACHE=1
-
-       - ccache -M 20G
-    
-       - ccache -o compression=true
-
-       - ccache -z
-
-       - make api-stubs-docs || echo no problem
-
-       - make system-api-stubs-docs || echo no problem
-
-       - make test-api-stubs-docs || echo no problem
-
-       - mka evolution
-
-
-Upload_script:
+       - mka otapackage
 
       - cd out/target/product/"$DEVICE"
 
@@ -102,4 +89,3 @@ Upload_script:
       - cat link.txt && echo " "
 
       - echo "============================"
-  
