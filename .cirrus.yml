@@ -34,7 +34,7 @@ task:
       - echo "Syncing The Sources...."
       - echo "============================"
       - mkdir pbrp
-      - cd pbrb
+      - cd pbrp
       - repo init -u https://github.com/PitchBlackRecoveryProject/manifest_pb.git -b android-9.0
       - repo sync
       - echo "============================"
@@ -45,7 +45,7 @@ task:
       - echo "============================"
       - echo "Starting the Build..."
       - echo "============================"
-      - cd twrp
+      - cd pbrp
       - git clone https://github.com/PitchBlackRecoveryProject/android_device_samsung_gtaxllte_recovery
       - . build/envsetup.sh
       - lunch omni_gtaxllte-eng && mka recoveryimage
